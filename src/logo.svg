@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="1542 818 65 24.112">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #454f63;
+        font-size: 16px;
+        font-family: SFUIDisplay-Regular, SF UI Display;
+      }
+
+      .cls-2 {
+        fill: #3acce1;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="Group_186" data-name="Group 186" transform="translate(1391 791.112)">
+    <text id="Wabi" class="cls-1" transform="translate(181 45.388)"><tspan x="0" y="0">Wabi</tspan></text>
+    <g id="Group_185" data-name="Group 185" transform="translate(18 5.888)">
+      <path id="Path_2174" data-name="Path 2174" class="cls-2" d="M8.037,0h8.037a8.037,8.037,0,0,1,8.037,8.037v8.037a8.037,8.037,0,0,1-8.037,8.037H8.037A8.037,8.037,0,0,1,0,16.075V8.037A8.037,8.037,0,0,1,8.037,0Z" transform="translate(133 21)"/>
+      <path id="Path_2173" data-name="Path 2173" class="cls-3" d="M4.541-4.653H2.951L.42-14.092H2.173L3.808-6.943H3.86l1.9-7.149H7.249l1.9,7.149H9.2l1.635-7.149h1.753L10.055-4.653H8.465l-1.93-6.829H6.47Z" transform="translate(138.889 42.398)"/>
+    </g>
+  </g>
+</svg>

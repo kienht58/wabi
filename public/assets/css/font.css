@@ -1,0 +1,14 @@
+@font-face {
+    font-family: "SF UI Display";
+    src: url(../fonts/SF-UI-Text-Regular.otf);
+}
+
+@font-face {
+    font-family: "SF UI Display Medium";
+    src: url(../fonts/SF-UI-Display-Medium.otf);
+}
+
+@font-face {
+    font-family: "SF UI Display Light";
+    src: url(../fonts/SF-UI-Display-Light.otf);
+}
