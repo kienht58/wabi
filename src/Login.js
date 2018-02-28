@@ -1,5 +1,4 @@
 import React from "react"
-import logo from "./logo.svg"
 import {CircularProgress} from "material-ui/Progress"
 
 class Login extends React.Component {
@@ -20,14 +19,26 @@ class Login extends React.Component {
     password: pwd
   })
 
+  componentDidMount() {
+    window.addEventListener('keypress', (event) => {
+      if (event.keyCode === 13) {
+        this.manageLogin()
+      }
+    })
+  }
+
   manageLogin = async () => {
     const {username, password} = this.state
     this.setState({
       isLoggingIn: true
     })
 
-    let response = await fetch('https://ancient-cove-12466.herokuapp.com/api/login', {
+    let response = await fetch('http://localhost:8000/api/login', {
       method: 'POST',
+      credentials: 'includes',
+      headers: {
+        'content-type': 'application/json'
+      },
       body: JSON.stringify({
         email: username,
         password: password
@@ -35,11 +46,11 @@ class Login extends React.Component {
     })
 
     let result = await response.json()
-    console.log(result)
 
-    this.setState({
-      isLoggingIn: false
-    })
+    if(result.token) {
+      document.cookie = `token=${result.token}`
+      this.props.verifyUser()
+    }
   }
 
   render() {
@@ -48,26 +59,18 @@ class Login extends React.Component {
       <div>
         <div
           style={{
-            padding: '8px 0',
-            display: 'flex',
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#fff'
-          }}
-        >
-          <img src={logo} alt="logo" style={{height: 24}}/>
-        </div>
-        <div
-          style={{
             display: 'flex',
             flex: 1,
             justifyContent: 'center',
             alignItems: 'stretch',
             flexDirection: 'column',
-            backgroundColor: '#F7F7F7'
+            backgroundColor: '#F7F7F7',
+            fontFamily: 'SF UI Display'
           }}
         >
+          <div style={{padding: '0 20px'}}>
+            <p>Bạn cần phải đăng nhập để tiếp tục!</p>
+          </div>
           <div
             style={{
               display: 'flex',
@@ -75,12 +78,12 @@ class Login extends React.Component {
               justifyContent: 'center',
               alignItems: 'stretch',
               flexDirection: 'column',
-              padding: '20px 15px 20px 15px'
+              padding: '10px 15px 20px 15px'
             }}
           >
             <input
               type="text"
-              placeholder="Số điện thoại"
+              placeholder="Email"
               style={{
                 height: 60,
                 paddingLeft: 60,

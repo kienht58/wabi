@@ -1,5 +1,5 @@
 import React from "react"
-import logo from './logo.svg'
+import {CircularProgress} from "material-ui/Progress"
 
 class Form extends React.Component {
   constructor(props) {
@@ -14,6 +14,7 @@ class Form extends React.Component {
       phone: '',
       time: '',
       imgs: [],
+      creating: false
     }
   }
 
@@ -57,7 +58,6 @@ class Form extends React.Component {
         let response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.address.lat},${this.state.address.lng}&key=AIzaSyBDWNf6gvLGEJvsdTUU2plNtzqzdiifEEg`)
         let result = await response.json()
         if(result.status === 'OK') {
-          console.log(result)
           this.setState({
             address: {
               ...this.state.address,
@@ -71,22 +71,35 @@ class Form extends React.Component {
     })
   }
 
-  render() {
+  createStore = async () => {
     const {name, address, phone, time, imgs} = this.state
+    const {accessToken} = this.props
+    this.setState({
+      creating: true
+    })
+    let response = await fetch('http://localhost:8000/api/stores', {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: name,
+        lat: address.lat,
+        lng: address.lng,
+        phone: phone,
+        address: address.fullAddress,
+        images: imgs
+      })
+    })
+
+    let result = await response.json()
+    console.log(result)
+  }
+
+  render() {
+    const {name, address, phone, time, imgs, creating} = this.state
     return (
       <div>
-        <div
-          style={{
-            padding: '8px 0',
-            display: 'flex',
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#fff'
-          }}
-        >
-          <img src={logo} alt="logo" style={{height: 24}}/>
-        </div>
         <div
           style={{
             display: 'flex',
@@ -287,10 +300,14 @@ class Form extends React.Component {
                 fontSize: 13,
                 color: 'white',
                 textTransform: 'uppercase',
-                border: 'none'
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
+              onClick={this.createStore}
             >
-              Bổ sung
+              {creating && <CircularProgress size={20} style={{color: '#fff'}} />}&nbsp;&nbsp;Bổ sung
             </button>
           </div>
         </div>
