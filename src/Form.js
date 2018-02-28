@@ -247,7 +247,7 @@ class Form extends React.Component {
                 backgroundPositionX: 18,
                 backgroundPositionY: 21
               }}
-              value={time}
+              value={note}
               onChange={(e) => this.changeNote(e.target.value)}
             />
           </div>
