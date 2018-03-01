@@ -1,6 +1,8 @@
 import React from "react"
 import {CircularProgress} from "material-ui/Progress"
 
+import logo from "./logo.svg"
+
 class Form extends React.Component {
   constructor(props) {
     super(props)
@@ -12,7 +14,7 @@ class Form extends React.Component {
         lng: ''
       },
       phone: '',
-      time: '',
+      note: '',
       imgs: [],
       creating: false
     }
@@ -29,7 +31,7 @@ class Form extends React.Component {
 
   changePhone = phone => this.setState({ phone })
 
-  changeTime = time => this.setState({ time })
+  changeNote = note => this.setState({ note })
 
   addImages = images => {
     let that = this
@@ -72,7 +74,7 @@ class Form extends React.Component {
   }
 
   createStore = async () => {
-    const {name, address, phone, time, imgs} = this.state
+    const {name, address, phone, note, imgs} = this.state
     const {accessToken} = this.props
     this.setState({
       creating: true
@@ -88,18 +90,43 @@ class Form extends React.Component {
         lng: address.lng,
         phone: phone,
         address: address.fullAddress,
-        images: imgs
+        note: note,
+        images: imgs,
+        token: accessToken
       })
     })
 
     let result = await response.json()
-    console.log(result)
+
+    if(response.ok && response.status === 200) {
+      if(!result.error) {
+        this.props.toggleAddStoresDialog()
+        this.props.showSuccessionMessage()
+      } else {
+        // TODO: notify
+      }
+    } else {
+      //TODO: warn about server error
+    }
   }
 
   render() {
-    const {name, address, phone, time, imgs, creating} = this.state
+    const {name, address, phone, note, imgs, creating} = this.state
     return (
       <div>
+        <div
+          style={{
+            padding: '8px 0',
+            display: 'flex',
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#fff'
+          }}
+        >
+          <i className="material-icons" onClick={this.props.toggleAddStoresDialog} style={{color: '#2a2e43', flex: 1, fontSize: 24}}>navigate_back</i>
+          <img src={logo} alt="logo" style={{height: 24, flex: 9}}/>
+        </div>
         <div
           style={{
             display: 'flex',
@@ -207,7 +234,7 @@ class Form extends React.Component {
             />
             <input
               type="text"
-              placeholder="Thời gian làm việc"
+              placeholder="Ghi chú"
               style={{
                 height: 60,
                 paddingLeft: 60,
@@ -221,7 +248,7 @@ class Form extends React.Component {
                 backgroundPositionY: 21
               }}
               value={time}
-              onChange={(e) => this.changeTime(e.target.value)}
+              onChange={(e) => this.changeNote(e.target.value)}
             />
           </div>
           <div
@@ -310,18 +337,6 @@ class Form extends React.Component {
               {creating && <CircularProgress size={20} style={{color: '#fff'}} />}&nbsp;&nbsp;Bổ sung
             </button>
           </div>
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            right: 0,
-            left: 0,
-            height: 64,
-            backgroundColor: '#2f2f2f'
-          }}
-        >
-
         </div>
       </div>
     )

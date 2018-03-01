@@ -7,7 +7,8 @@ class Login extends React.Component {
     this.state = {
       username: '',
       password: '',
-      isLoggingIn: false
+      isLoggingIn: false,
+      warning: false
     }
   }
 
@@ -47,14 +48,23 @@ class Login extends React.Component {
 
     let result = await response.json()
 
-    if(result.token) {
-      document.cookie = `token=${result.token}`
-      this.props.verifyUser()
+    if(response.ok && response.status === 200) {
+      if(result.token) {
+        document.cookie = `token=${result.token}`
+        this.props.verifyUser()
+      }
+    } else {
+      if(response.status === 422) {
+        this.setState({
+          warning: true,
+          isLoggingIn: false
+        })
+      }
     }
   }
 
   render() {
-    const {username, password, isLoggingIn} = this.state
+    const {username, password, isLoggingIn, warning} = this.state
     return (
       <div>
         <div
@@ -69,7 +79,11 @@ class Login extends React.Component {
           }}
         >
           <div style={{padding: '0 20px'}}>
-            <p>Bạn cần phải đăng nhập để tiếp tục!</p>
+            {warning ? (
+              <p>Tên đăng nhập hoặc mật khẩu không chính xác!</p>
+            ) : (
+              <p>Bạn cần phải đăng nhập để tiếp tục!</p>
+            )}
           </div>
           <div
             style={{

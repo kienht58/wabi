@@ -5,6 +5,7 @@ import {CircularProgress} from "material-ui/Progress"
 import logo from "./logo.svg"
 import Form from "./Form"
 import Login from "./Login"
+import List from "./List"
 
 class App extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class App extends Component {
 
   async componentWillMount() {
     const {cookies} = this.props
-    const accessToken = cookies.get('_token')
+    const accessToken = cookies.get('token')
 
     if(accessToken) {
       let response = await fetch(`http://localhost:8000/api/validateUserToken?token=${accessToken}`)
@@ -47,7 +48,7 @@ class App extends Component {
   render() {
     const {checkLogin, isLoggedIn} = this.state
     const {cookies} = this.props
-    const accessToken = cookies.get('_token')
+    const accessToken = cookies.get('token')
     return (
       <div>
         <div
@@ -86,7 +87,7 @@ class App extends Component {
           </div>
         ) : (
           isLoggedIn ? (
-            <Form accessToken={accessToken}/>
+            <List accessToken={accessToken} />
           ) : (
             <Login verifyUser={this.verifyUser}/>
           )
