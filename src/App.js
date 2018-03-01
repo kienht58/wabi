@@ -61,7 +61,7 @@ class App extends Component {
             backgroundColor: '#fff'
           }}
         >
-          <img src={logo} alt="logo" style={{height: 24}}/>
+          <img src={logo} alt="logo" style={{height: 32}}/>
         </div>
         {checkLogin ? (
           <div

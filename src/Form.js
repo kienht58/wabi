@@ -124,8 +124,8 @@ class Form extends React.Component {
             backgroundColor: '#fff'
           }}
         >
-          <i className="material-icons" onClick={this.props.toggleAddStoresDialog} style={{color: '#2a2e43', flex: 1, fontSize: 24}}>navigate_back</i>
-          <img src={logo} alt="logo" style={{height: 24, flex: 9}}/>
+          <i className="material-icons" onClick={this.props.toggleAddStoresDialog} style={{color: '#2a2e43', flex: 1, fontSize: 24}}>keyboard_backspace</i>
+          <img src={logo} alt="logo" style={{height: 32, flex: 9, paddingRight: 32}}/>
         </div>
         <div
           style={{
