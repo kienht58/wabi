@@ -176,7 +176,7 @@ class List extends React.Component {
                       fontFamily: 'Roboto, sans-serif'
                     }}
                   >
-                    {store.phone_number}
+                    {store.phone_number} {store.open_time} - {store.close_time}
                   </span>
                   <span
                     style={{

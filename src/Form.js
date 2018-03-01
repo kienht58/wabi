@@ -1,5 +1,8 @@
 import React from "react"
 import {CircularProgress} from "material-ui/Progress"
+import { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
+
+import Autocomplete from "./mapAutocomplete"
 
 import logo from "./logo.svg"
 
@@ -21,18 +24,48 @@ class Form extends React.Component {
       },
       note: '',
       imgs: [],
-      creating: false
+      creating: false,
+      loadingMap: false
     }
   }
 
   changeName = name => this.setState({ name })
 
-  changeAddress = address => this.setState({
-    address: {
-      ...this.state.address,
-      fullAddress: address
-    }
-  })
+  changeAddress = address => {
+    this.setState({
+      address: {
+        ...this.state.address,
+        fullAddress: address
+      }
+    })
+  }
+
+  setAddress = (address) => {
+    this.setState({
+      address: {
+        ...this.state.address,
+        fullAddress: address
+      }
+    })
+    geocodeByAddress(this.state.address.fullAddress)
+      .then(results => getLatLng(results[0]))
+      .then(({ lat, lng }) => {
+        this.setState({
+          address: {
+            ...this.state.address,
+            lat: lat,
+            lng: lng
+          },
+          loadingMap: false
+        })
+      })
+      .catch(error => {
+        console.log('Geocode Error', error)
+        this.setState({
+          loadingMap: false
+        })
+      })
+  }
 
   changePhone = phone => this.setState({ phone })
 
@@ -67,38 +100,14 @@ class Form extends React.Component {
     }
   }
 
-  getCurrentLocation = () => {
-    navigator.geolocation.getCurrentPosition(position => {
-      this.setState({
-        address: {
-          ...this.state.address,
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        }
-      }, async () => {
-        let response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.address.lat},${this.state.address.lng}&key=AIzaSyBDWNf6gvLGEJvsdTUU2plNtzqzdiifEEg`)
-        let result = await response.json()
-        if(result.status === 'OK') {
-          this.setState({
-            address: {
-              ...this.state.address,
-              fullAddress: result.results[0].formatted_address
-            }
-          })
-        } else if(result.status === 'ZERO_RESULTS') {
-
-        }
-      })
-    })
-  }
-
   createStore = async () => {
-    const {name, address, phone, note, imgs} = this.state
+    const {name, address, phone, time, note, imgs} = this.state
     const {accessToken} = this.props
     this.setState({
       creating: true
     })
-    let response = await fetch('https://walkbike.herokuapp.com/api/stores', {
+
+    let response = await fetch('http://localhost:8000/api/stores', {
       method: 'post',
       headers: {
         'content-type': 'application/json'
@@ -110,6 +119,8 @@ class Form extends React.Component {
         phone: phone,
         address: address.fullAddress,
         note: note,
+        from_time: time.from,
+        to_time: time.to,
         images: imgs,
         token: accessToken
       })
@@ -130,7 +141,7 @@ class Form extends React.Component {
   }
 
   render() {
-    const {name, address, phone, note, imgs, time, creating} = this.state
+    const {name, address, phone, note, imgs, time, creating, loadingMap} = this.state
     return (
       <div style={{backgroundColor: '#fff'}}>
         <div
@@ -174,7 +185,9 @@ class Form extends React.Component {
                 paddingLeft: 60,
                 borderRadius: 16,
                 border: 'none',
+                WebkitAppearance: 'none',
                 boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
+                WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
                 backgroundImage: 'url(assets/images/home.svg)',
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: '7%',
@@ -194,42 +207,16 @@ class Form extends React.Component {
                 marginBottom: 20,
                 borderRadius: 16,
                 border: 'none',
+                WebkitAppearance: 'none',
                 boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
-                overflow: 'hidden'
+                WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
               }}
             >
-              <input
-                type="text"
-                placeholder="Địa chỉ"
-                style={{
-                  height: 56,
-                  paddingLeft: 60,
-                  paddingRight: 10,
-                  border: 'none',
-                  boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
-                  backgroundImage: 'url(assets/images/location.svg)',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundSize: '4.5%',
-                  backgroundPositionX: 21,
-                  backgroundPositionY: 22,
-                  flex: 2
-                }}
-                value={address.fullAddress}
-                onFocus={(e) => e.target.setSelectionRange(0, address.fullAddress.length)}
-                onChange={(e) => this.changeAddress(e.target.value)}
-              />
-              <button
-                style={{
-                  background: '#fff',
-                  border: 'none',
-                  height: 58,
-                  width: 24,
-                  paddingRight: 30,
-                  backgroundImage: 'url(assets/images/my_location.svg)',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPositionY: 19
-                }}
-                onClick={() => this.getCurrentLocation()}
+              <Autocomplete
+                address={address}
+                changeAddress={this.changeAddress}
+                setAddress={this.setAddress}
+                loading={loadingMap}
               />
             </div>
             <input
@@ -240,7 +227,9 @@ class Form extends React.Component {
                 paddingLeft: 60,
                 borderRadius: 16,
                 border: 'none',
+                WebkitAppearance: 'none',
                 boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
+                WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
                 backgroundImage: 'url(assets/images/phone.svg)',
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: '7%',
@@ -260,7 +249,9 @@ class Form extends React.Component {
                   paddingLeft: 60,
                   borderRadius: 16,
                   border: 'none',
+                  WebkitAppearance: 'none',
                   boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
+                  WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
                   backgroundImage: 'url(assets/images/clock.svg)',
                   backgroundRepeat: 'no-repeat',
                   backgroundSize: '12%',
@@ -280,7 +271,9 @@ class Form extends React.Component {
                   paddingLeft: 60,
                   borderRadius: 16,
                   border: 'none',
+                  WebkitAppearance: 'none',
                   boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
+                  WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
                   backgroundImage: 'url(assets/images/clock.svg)',
                   backgroundRepeat: 'no-repeat',
                   backgroundSize: '12%',
@@ -301,7 +294,9 @@ class Form extends React.Component {
                 paddingLeft: 60,
                 borderRadius: 16,
                 border: 'none',
+                WebkitAppearance: 'none',
                 boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
+                WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
                 backgroundImage: 'url(assets/images/phone.svg)',
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: '7%',
@@ -334,6 +329,7 @@ class Form extends React.Component {
                 padding: '18px 20px 18px 48px',
                 borderRadius: 12,
                 border: 'none',
+                WebkitAppearance: 'none',
                 backgroundImage: 'url(assets/images/add-image.svg)',
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: '18%',
@@ -390,6 +386,7 @@ class Form extends React.Component {
                 color: 'white',
                 textTransform: 'uppercase',
                 border: 'none',
+                WebkitAppearance: 'none',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
