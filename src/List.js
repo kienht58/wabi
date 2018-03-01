@@ -3,8 +3,18 @@ import {CircularProgress} from "material-ui/Progress"
 import Button from "material-ui/Button"
 import Dialog from "material-ui/Dialog"
 import Snackbar, {SnackbarContent} from "material-ui/Snackbar"
+import {withStyles} from "material-ui/styles"
 
 import Form from "./Form"
+
+const styles = {
+  root: {
+    backgroundColor: '#F7F7F7'
+  },
+  paper: {
+    backgroundColor: '#F7F7F7'
+  }
+}
 
 var ccr
 
@@ -74,14 +84,14 @@ class List extends React.Component {
     const {stores, loading, keyword, open, showMsg} = this.state
     const {accessToken} = this.props
     return (
-      <div style={{display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1, padding: 20}}>
+      <div style={{display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1, padding: 20, borderTop: '0.6px solid #f7f7f7'}}>
         <input
           type="text"
           value={keyword}
           onChange={e => this.changeKeyword(e.target.value)}
           placeholder="Nhập tên cửa hàng, địa chỉ"
           style={{
-            height: 60,
+            height: 48,
             paddingLeft: 60,
             borderRadius: 10,
             border: 'none',
@@ -90,7 +100,7 @@ class List extends React.Component {
             backgroundRepeat: 'no-repeat',
             backgroundSize: '7%',
             backgroundPositionX: 18,
-            backgroundPositionY: 20,
+            backgroundPositionY: 15,
             marginBottom: 20
           }}
         />
@@ -118,7 +128,7 @@ class List extends React.Component {
           </div>
         ) : (
           <div style={{display: 'flex', flexDirection: 'column', alignItems: 'stretch', overflowY: 'scroll'}}>
-            <p>Tổng số địa điểm đã thêm: {stores.length}</p>
+            <p style={{fontSize: 13, fontFamily: 'Roboto, sans-serif'}}>Số địa điểm đã thêm: {stores.length}</p>
             {stores.map((store, idx) => (
               <div
                 key={idx}
@@ -127,11 +137,14 @@ class List extends React.Component {
                    flexDirection: 'row',
                    borderRadius: 10,
                    boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
-                   padding: 8,
-                   marginBottom: 10
+                   padding: '4px',
+                   margin: '0px 2px 10px 2px'
                 }}
               >
-                <div style={{display: 'flex', flex: 1, flexDirection: 'column'}}>
+                <div style={{display: 'flex', flex: 4}}>
+                  <img src="http://via.placeholder.com/92x64" alt="placeholder" style={{borderRadius: 4}}/>
+                </div>
+                <div style={{display: 'flex', flex: 7, flexDirection: 'column'}}>
                   <span
                     style={{
                       fontSize: 14,
@@ -146,7 +159,7 @@ class List extends React.Component {
                   <span
                     style={{
                       marginTop: 5,
-                      fontSize: 12,
+                      fontSize: 10,
                       textOverflow: 'ellipsis',
                       overflow: 'hidden',
                       fontFamily: 'Roboto, sans-serif'
@@ -156,19 +169,19 @@ class List extends React.Component {
                   </span>
                   <span
                     style={{
-                      marginTop: 5,
-                      fontSize: 12,
+                      marginTop: 3,
+                      fontSize: 10,
                       textOverflow: 'ellipsis',
                       overflow: 'hidden',
                       fontFamily: 'Roboto, sans-serif'
                     }}
                   >
-                    {store.phone}
+                    {store.phone_number}
                   </span>
                   <span
                     style={{
-                      marginTop: 8,
-                      fontSize: 12,
+                      marginTop: 12,
+                      fontSize: 10,
                       textOverflow: 'ellipsis',
                       overflow: 'hidden',
                       fontFamily: 'Roboto, sans-serif'
@@ -198,6 +211,10 @@ class List extends React.Component {
           fullScreen
           open={open}
           onClose={this.toggleAddStoresDialog}
+          classes={{
+            root: this.props.classes.root,
+            paper: this.props.classes.paper
+          }}
         >
           <Form accessToken={accessToken} toggleAddStoresDialog={this.toggleAddStoresDialog} showSuccessionMessage={this.showSuccessionMessage}/>
         </Dialog>
@@ -216,4 +233,4 @@ class List extends React.Component {
   }
 }
 
-export default List
+export default withStyles(styles)(List)

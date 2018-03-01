@@ -3,6 +3,7 @@ import {CircularProgress} from "material-ui/Progress"
 
 import logo from "./logo.svg"
 
+
 class Form extends React.Component {
   constructor(props) {
     super(props)
@@ -113,7 +114,7 @@ class Form extends React.Component {
   render() {
     const {name, address, phone, note, imgs, creating} = this.state
     return (
-      <div>
+      <div style={{backgroundColor: '#fff'}}>
         <div
           style={{
             padding: '8px 0',
@@ -124,7 +125,7 @@ class Form extends React.Component {
             backgroundColor: '#fff'
           }}
         >
-          <i className="material-icons" onClick={this.props.toggleAddStoresDialog} style={{color: '#2a2e43', flex: 1, fontSize: 24}}>keyboard_backspace</i>
+          <i className="material-icons" onClick={this.props.toggleAddStoresDialog} style={{color: '#2a2e43', flex: 1, fontSize: 24, marginLeft: 10}}>keyboard_backspace</i>
           <img src={logo} alt="logo" style={{height: 32, flex: 9, paddingRight: 32}}/>
         </div>
         <div

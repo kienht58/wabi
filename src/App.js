@@ -3,7 +3,6 @@ import {withCookies} from "react-cookie"
 import {CircularProgress} from "material-ui/Progress"
 
 import logo from "./logo.svg"
-import Form from "./Form"
 import Login from "./Login"
 import List from "./List"
 
