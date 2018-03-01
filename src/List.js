@@ -131,8 +131,7 @@ class List extends React.Component {
                    marginBottom: 10
                 }}
               >
-                <div style={{display: 'flex', flex: 3}}>image</div>
-                <div style={{display: 'flex', flex: 7, flexDirection: 'column'}}>
+                <div style={{display: 'flex', flex: 1, flexDirection: 'column'}}>
                   <span
                     style={{
                       fontSize: 14,
