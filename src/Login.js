@@ -78,11 +78,11 @@ class Login extends React.Component {
             fontFamily: 'SF UI Display'
           }}
         >
-          <div style={{padding: '0 20px'}}>
+          <div style={{padding: '20px 20px 10px 20px'}}>
             {warning ? (
-              <p>Tên đăng nhập hoặc mật khẩu không chính xác!</p>
+              <span style={{fontSize: 13, color: '#f04846', fontFamily: 'Roboto, sans-serif'}}>Tên đăng nhập hoặc mật khẩu không chính xác!</span>
             ) : (
-              <p>Bạn cần phải đăng nhập để tiếp tục!</p>
+              <span style={{fontSize: 13, fontFamily: 'Roboto, sans-serif'}}>Bạn cần phải đăng nhập để tiếp tục!</span>
             )}
           </div>
           <div
@@ -97,7 +97,7 @@ class Login extends React.Component {
           >
             <input
               type="text"
-              placeholder="Email"
+              placeholder="Tên đăng nhập"
               style={{
                 height: 60,
                 paddingLeft: 60,
