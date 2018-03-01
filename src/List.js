@@ -56,7 +56,7 @@ class List extends React.Component {
 
     const {keyword} = this.state
     const {accessToken} = this.props
-    let response = await fetch(`http://localhost:8000/api/stores?token=${accessToken}&keyword=${keyword}`)
+    let response = await fetch(`https://walkbike.herokuapp.com/api/stores?token=${accessToken}&keyword=${keyword}`)
     let result = await response.json()
     if(response.ok && response.status === 200) {
       if(result.data) {

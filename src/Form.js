@@ -79,7 +79,7 @@ class Form extends React.Component {
     this.setState({
       creating: true
     })
-    let response = await fetch('http://localhost:8000/api/stores', {
+    let response = await fetch('https://walkbike.herokuapp.com/api/stores', {
       method: 'post',
       headers: {
         'content-type': 'application/json'
