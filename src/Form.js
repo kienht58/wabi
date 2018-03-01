@@ -15,6 +15,10 @@ class Form extends React.Component {
         lng: ''
       },
       phone: '',
+      time: {
+        from: '',
+        to: ''
+      },
       note: '',
       imgs: [],
       creating: false
@@ -33,6 +37,20 @@ class Form extends React.Component {
   changePhone = phone => this.setState({ phone })
 
   changeNote = note => this.setState({ note })
+
+  changeTimeFrom = time => this.setState({
+    time: {
+      ...this.state.time,
+      from: time
+    }
+  })
+
+  changeTimeTo = time => this.setState({
+    time: {
+      ...this.state.time,
+      to: time
+    }
+  })
 
   addImages = images => {
     let that = this
@@ -112,7 +130,7 @@ class Form extends React.Component {
   }
 
   render() {
-    const {name, address, phone, note, imgs, creating} = this.state
+    const {name, address, phone, note, imgs, time, creating} = this.state
     return (
       <div style={{backgroundColor: '#fff'}}>
         <div
@@ -145,14 +163,14 @@ class Form extends React.Component {
               justifyContent: 'center',
               alignItems: 'stretch',
               flexDirection: 'column',
-              padding: '20px 15px 20px 15px'
+              padding: '20px 15px 0px 15px'
             }}
           >
             <input
               type="text"
               placeholder="Tên cửa hàng"
               style={{
-                height: 60,
+                height: 56,
                 paddingLeft: 60,
                 borderRadius: 16,
                 border: 'none',
@@ -184,7 +202,7 @@ class Form extends React.Component {
                 type="text"
                 placeholder="Địa chỉ"
                 style={{
-                  height: 60,
+                  height: 56,
                   paddingLeft: 60,
                   paddingRight: 10,
                   border: 'none',
@@ -204,7 +222,7 @@ class Form extends React.Component {
                 style={{
                   background: '#fff',
                   border: 'none',
-                  height: 62,
+                  height: 58,
                   width: 24,
                   paddingRight: 30,
                   backgroundImage: 'url(assets/images/my_location.svg)',
@@ -218,7 +236,7 @@ class Form extends React.Component {
               type="tel"
               placeholder="Số điện thoại"
               style={{
-                height: 60,
+                height: 56,
                 paddingLeft: 60,
                 borderRadius: 16,
                 border: 'none',
@@ -233,20 +251,63 @@ class Form extends React.Component {
               value={phone}
               onChange={(e) => this.changePhone(e.target.value)}
             />
+            <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 20}}>
+              <input
+                type="time"
+                placeholder="Giờ mở cửa"
+                style={{
+                  height: 56,
+                  paddingLeft: 60,
+                  borderRadius: 16,
+                  border: 'none',
+                  boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
+                  backgroundImage: 'url(assets/images/clock.svg)',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '12%',
+                  backgroundPositionX: 18,
+                  backgroundPositionY: 21,
+                  flex: 1,
+                  marginRight: 8
+                }}
+                value={time.from}
+                onChange={(e) => this.changeTimeFrom(e.target.value)}
+              />
+              <input
+                type="time"
+                placeholder="Giờ đóng cửa"
+                style={{
+                  height: 56,
+                  paddingLeft: 60,
+                  borderRadius: 16,
+                  border: 'none',
+                  boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
+                  backgroundImage: 'url(assets/images/clock.svg)',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '12%',
+                  backgroundPositionX: 18,
+                  backgroundPositionY: 21,
+                  flex: 1,
+                  marginLeft: 8
+                }}
+                value={time.to}
+                onChange={(e) => this.changeTimeTo(e.target.value)}
+              />
+            </div>
             <input
               type="text"
-              placeholder="Ghi chú"
+              placeholder="Ghi chú"
               style={{
-                height: 60,
+                height: 56,
                 paddingLeft: 60,
                 borderRadius: 16,
                 border: 'none',
                 boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
-                backgroundImage: 'url(assets/images/clock.svg)',
+                backgroundImage: 'url(assets/images/phone.svg)',
                 backgroundRepeat: 'no-repeat',
-                backgroundSize: '6%',
-                backgroundPositionX: 18,
-                backgroundPositionY: 21
+                backgroundSize: '7%',
+                backgroundPositionX: 17,
+                backgroundPositionY: 20,
+                marginBottom: 20
               }}
               value={note}
               onChange={(e) => this.changeNote(e.target.value)}
@@ -260,7 +321,7 @@ class Form extends React.Component {
               backgroundColor: '#fff',
               padding: '10px 10px 10px 15px',
               overflowX: 'scroll',
-              margin: '10px 0'
+              margin: '5px 0'
             }}
           >
             <button
