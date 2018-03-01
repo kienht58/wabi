@@ -137,7 +137,8 @@ class List extends React.Component {
                       fontSize: 14,
                       textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',
-                      overflow: 'hidden'
+                      overflow: 'hidden',
+                      fontFamily: 'Roboto, sans-serif'
                     }}
                   >
                     {store.name}
@@ -147,7 +148,8 @@ class List extends React.Component {
                       marginTop: 5,
                       fontSize: 12,
                       textOverflow: 'ellipsis',
-                      overflow: 'hidden'
+                      overflow: 'hidden',
+                      fontFamily: 'Roboto, sans-serif'
                     }}
                   >
                     {store.address}
@@ -157,7 +159,8 @@ class List extends React.Component {
                       marginTop: 5,
                       fontSize: 12,
                       textOverflow: 'ellipsis',
-                      overflow: 'hidden'
+                      overflow: 'hidden',
+                      fontFamily: 'Roboto, sans-serif'
                     }}
                   >
                     {store.phone}
@@ -167,7 +170,8 @@ class List extends React.Component {
                       marginTop: 8,
                       fontSize: 12,
                       textOverflow: 'ellipsis',
-                      overflow: 'hidden'
+                      overflow: 'hidden',
+                      fontFamily: 'Roboto, sans-serif'
                     }}
                   >
                     {store.note}
