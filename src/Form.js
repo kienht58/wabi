@@ -1,8 +1,6 @@
 import React from "react"
 import {CircularProgress} from "material-ui/Progress"
-import { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 
-import Autocomplete from "./mapAutocomplete"
 
 import logo from "./logo.svg"
 
@@ -40,31 +38,29 @@ class Form extends React.Component {
     })
   }
 
-  setAddress = (address) => {
-    this.setState({
-      address: {
-        ...this.state.address,
-        fullAddress: address
-      }
+  getCurrentLocation = () => {
+    navigator.geolocation.getCurrentPosition(position => {
+      this.setState({
+        address: {
+          ...this.state.address,
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        }
+      }, async () => {
+        let response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.address.lat},${this.state.address.lng}&key=AIzaSyBDWNf6gvLGEJvsdTUU2plNtzqzdiifEEg`)
+        let result = await response.json()
+        if(result.status === 'OK') {
+          this.setState({
+            address: {
+              ...this.state.address,
+              fullAddress: result.results[0].formatted_address
+            }
+          })
+        } else if(result.status === 'ZERO_RESULTS') {
+
+        }
+      })
     })
-    geocodeByAddress(this.state.address.fullAddress)
-      .then(results => getLatLng(results[0]))
-      .then(({ lat, lng }) => {
-        this.setState({
-          address: {
-            ...this.state.address,
-            lat: lat,
-            lng: lng
-          },
-          loadingMap: false
-        })
-      })
-      .catch(error => {
-        console.log('Geocode Error', error)
-        this.setState({
-          loadingMap: false
-        })
-      })
   }
 
   changePhone = phone => this.setState({ phone })
@@ -107,7 +103,7 @@ class Form extends React.Component {
       creating: true
     })
 
-    let response = await fetch('http://localhost:8000/api/stores', {
+    let response = await fetch('https://wabike.herokuapp.com/api/stores', {
       method: 'post',
       headers: {
         'content-type': 'application/json'
@@ -207,16 +203,42 @@ class Form extends React.Component {
                 marginBottom: 20,
                 borderRadius: 16,
                 border: 'none',
-                WebkitAppearance: 'none',
                 boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
-                WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
+                overflow: 'hidden'
               }}
             >
-              <Autocomplete
-                address={address}
-                changeAddress={this.changeAddress}
-                setAddress={this.setAddress}
-                loading={loadingMap}
+              <input
+                type="text"
+                placeholder="Địa chỉ"
+                style={{
+                  height: 60,
+                  paddingLeft: 60,
+                  paddingRight: 10,
+                  border: 'none',
+                  boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
+                  backgroundImage: 'url(assets/images/location.svg)',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '4.5%',
+                  backgroundPositionX: 21,
+                  backgroundPositionY: 22,
+                  flex: 2
+                }}
+                value={address.fullAddress}
+                onFocus={(e) => e.target.setSelectionRange(0, address.fullAddress.length)}
+                onChange={(e) => this.changeAddress(e.target.value)}
+              />
+              <button
+                style={{
+                  background: '#fff',
+                  border: 'none',
+                  height: 62,
+                  width: 24,
+                  paddingRight: 30,
+                  backgroundImage: 'url(assets/images/my_location.svg)',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPositionY: 19
+                }}
+                onClick={() => this.getCurrentLocation()}
               />
             </div>
             <input

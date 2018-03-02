@@ -6,6 +6,10 @@ import Snackbar, {SnackbarContent} from "material-ui/Snackbar"
 import {withStyles} from "material-ui/styles"
 
 import Form from "./Form"
+import location from "./location.svg"
+import note from "./note.svg"
+import phone from "./phone.svg"
+import clock from './clock.svg'
 
 const styles = {
   root: {
@@ -162,21 +166,33 @@ class List extends React.Component {
                       fontSize: 10,
                       textOverflow: 'ellipsis',
                       overflow: 'hidden',
-                      fontFamily: 'Roboto, sans-serif'
+                      fontFamily: 'Roboto, sans-serif',
+                      lineHeight: 1.5,
+                      alignItems: 'flex-start'
                     }}
                   >
+                    <img src={location} alt="location" style={{width: 15, height: 15}}/> &nbsp;&nbsp;
                     {store.address}
                   </span>
                   <span
                     style={{
-                      marginTop: 3,
+                      marginTop: 4,
                       fontSize: 10,
                       textOverflow: 'ellipsis',
                       overflow: 'hidden',
-                      fontFamily: 'Roboto, sans-serif'
+                      fontFamily: 'Roboto, sans-serif',
+                      display: 'flex',
+                      justifyContent: 'space-between'
                     }}
                   >
-                    {store.phone_number} {store.open_time} - {store.close_time}
+                    <span style={{display: 'flex', alignItems: 'center'}}>
+                      <img src={phone} alt="phone" style={{width: 12, height: 12}}/> &nbsp;&nbsp;
+                      {store.phone_number}
+                    </span>
+                    <span style={{paddingRight: 8, display: 'flex', alignItems: 'center'}}>
+                      <img src={clock} alt="clock" style={{width: 12, height: 12}}/> &nbsp;&nbsp;
+                      <span>8:00 - 21:00</span>
+                    </span>
                   </span>
                   <span
                     style={{
@@ -187,6 +203,7 @@ class List extends React.Component {
                       fontFamily: 'Roboto, sans-serif'
                     }}
                   >
+                    <img src={note} alt="note" style={{width: 12, height: 12}}/> &nbsp;&nbsp;
                     {store.note}
                   </span>
                 </div>
@@ -219,7 +236,7 @@ class List extends React.Component {
           <Form accessToken={accessToken} toggleAddStoresDialog={this.toggleAddStoresDialog} showSuccessionMessage={this.showSuccessionMessage}/>
         </Dialog>
         <Snackbar
-          anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+          anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
           open={showMsg}
           onClose={this.closeSuccessionMessage}
         >
