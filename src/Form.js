@@ -3,7 +3,7 @@ import {CircularProgress} from "material-ui/Progress"
 
 import my_location from "./my_location.svg"
 import logo from "./logo.svg"
-import Iframe from "./Iframe";
+import Iframe from "./Iframe"
 
 
 class Form extends React.Component {
@@ -290,7 +290,7 @@ class Form extends React.Component {
               <input
                 type="text"
                 placeholder="Địa chỉ"
-                style={{
+                style={loadingMap.loadSuccess ? {
                   height: 60,
                   paddingLeft: 60,
                   paddingRight: 10,
@@ -303,6 +303,23 @@ class Form extends React.Component {
                   WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
                   backgroundImage: 'url(assets/images/location_red.svg)',
                   backgroundSize: '8%',
+                  backgroundPositionX: 21,
+                  backgroundPositionY: 22,
+                  flex: 2,
+                  position:'relative'
+                } : {
+                  height: 60,
+                  paddingLeft: 60,
+                  paddingRight: 10,
+                  border: 'none',
+                  WebkitAppearance: 'none',
+                  backgroundRepeat: 'no-repeat',
+                  borderRadius: 16,
+                  margin: '2px 8px 2px 2px',
+                  boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
+                  WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
+                  backgroundImage: 'url(assets/images/location.svg)',
+                  backgroundSize: '6.5%',
                   backgroundPositionX: 21,
                   backgroundPositionY: 22,
                   flex: 2,
@@ -353,52 +370,6 @@ class Form extends React.Component {
               value={phone}
               onChange={(e) => this.changePhone(e.target.value)}
             />
-            <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 20}}>
-              <input
-                type="time"
-                placeholder="Giờ mở cửa"
-                style={{
-                  height: 56,
-                  paddingLeft: 60,
-                  borderRadius: 16,
-                  border: 'none',
-                  WebkitAppearance: 'none',
-                  boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
-                  WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
-                  backgroundImage: 'url(assets/images/clock.svg)',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundSize: '12%',
-                  backgroundPositionX: 18,
-                  backgroundPositionY: 21,
-                  flex: 1,
-                  marginRight: 8
-                }}
-                value={time.from}
-                onChange={(e) => this.changeTimeFrom(e.target.value)}
-              />
-              <input
-                type="time"
-                placeholder="Giờ đóng cửa"
-                style={{
-                  height: 56,
-                  paddingLeft: 60,
-                  borderRadius: 16,
-                  border: 'none',
-                  WebkitAppearance: 'none',
-                  boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
-                  WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
-                  backgroundImage: 'url(assets/images/clock.svg)',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundSize: '12%',
-                  backgroundPositionX: 18,
-                  backgroundPositionY: 21,
-                  flex: 1,
-                  marginLeft: 8
-                }}
-                value={time.to}
-                onChange={(e) => this.changeTimeTo(e.target.value)}
-              />
-            </div>
             <input
               type="text"
               placeholder="Ghi chú"
@@ -410,7 +381,7 @@ class Form extends React.Component {
                 WebkitAppearance: 'none',
                 boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
                 WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
-                backgroundImage: 'url(assets/images/phone.svg)',
+                backgroundImage: 'url(assets/images/note.svg)',
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: '7%',
                 backgroundPositionX: 17,
