@@ -7,6 +7,7 @@ import {withStyles} from "material-ui/styles"
 
 import Form from "./Form"
 import location from "./location.svg"
+
 import note from "./note.svg"
 import phone from "./phone.svg"
 import clock from './clock.svg'
@@ -88,24 +89,32 @@ class List extends React.Component {
     const {stores, loading, keyword, open, showMsg} = this.state
     const {accessToken} = this.props
     return (
-      <div style={{display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1, padding: 20, borderTop: '0.6px solid #f7f7f7'}}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'stretch',
+          flex: 1,
+          padding: 10,
+          height: '100vh',
+          backgroundColor: '#F7F7F7'
+        }}
+      >
         <input
           type="text"
           value={keyword}
           onChange={e => this.changeKeyword(e.target.value)}
           placeholder="Nhập tên cửa hàng, địa chỉ"
           style={{
-            height: 48,
-            paddingLeft: 60,
+            padding: '10px 10px 10px 60px',
             borderRadius: 10,
             border: 'none',
-            boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
             backgroundImage: 'url(assets/images/search.svg)',
             backgroundRepeat: 'no-repeat',
-            backgroundSize: '7%',
+            backgroundSize: '5%',
             backgroundPositionX: 18,
-            backgroundPositionY: 15,
-            marginBottom: 20
+            backgroundPositionY: 10,
+            marginBottom: 10
           }}
         />
         {loading ? (
@@ -132,80 +141,98 @@ class List extends React.Component {
           </div>
         ) : (
           <div style={{display: 'flex', flexDirection: 'column', alignItems: 'stretch', overflowY: 'scroll'}}>
-            <p style={{fontSize: 13, fontFamily: 'Roboto, sans-serif'}}>Số địa điểm đã thêm: {stores.length}</p>
+            <p
+              style={{
+                fontSize: 13,
+                fontFamily: 'SF UI Display'
+              }}
+            >
+              Số địa điểm đã thêm: {stores.length}
+            </p>
             {stores.map((store, idx) => (
               <div
                 key={idx}
                 style={{
-                   display: 'flex',
-                   flexDirection: 'row',
-                   borderRadius: 10,
-                   boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
-                   padding: '4px',
-                   margin: '0px 2px 10px 2px'
+                  borderRadius: 10,
+                  boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
+                  padding: '8px',
+                  marginBottom: 8,
+                  backgroundColor: 'white'
                 }}
               >
-                <div style={{display: 'flex', flex: 4}}>
-                  <img src="http://via.placeholder.com/92x64" alt="placeholder" style={{borderRadius: 4}}/>
+                <div style={{width: '30%', float: 'left', marginRight: 8}}>
+                  <img
+                    src="http://via.placeholder.com/81x80"
+                    alt="placeholder"
+                    style={{borderRadius: 4, width: '100%'}}
+                  />
                 </div>
-                <div style={{display: 'flex', flex: 7, flexDirection: 'column'}}>
-                  <span
+                <div
+                  style={{
+                    width: 'calc(70% - 8px)',
+                    fontFamily: 'SF UI Display',
+                    float: 'left'
+                  }}
+                >
+                  <div
                     style={{
                       fontSize: 14,
                       textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      fontFamily: 'Roboto, sans-serif'
+                      overflow: 'hidden'
                     }}
                   >
                     {store.name}
-                  </span>
-                  <span
+                  </div>
+                  <div
                     style={{
                       marginTop: 5,
-                      fontSize: 10,
-                      textOverflow: 'ellipsis',
-                      overflow: 'hidden',
-                      fontFamily: 'Roboto, sans-serif',
-                      lineHeight: 1.5,
-                      alignItems: 'flex-start'
+                      fontSize: 12
                     }}
                   >
-                    <img src={location} alt="location" style={{width: 15, height: 15}}/> &nbsp;&nbsp;
                     {store.address}
-                  </span>
-                  <span
+                  </div>
+                  <div
                     style={{
                       marginTop: 4,
                       fontSize: 10,
                       textOverflow: 'ellipsis',
                       overflow: 'hidden',
-                      fontFamily: 'Roboto, sans-serif',
                       display: 'flex',
-                      justifyContent: 'space-between'
+                      justifyContent: 'space-between',
+                      color: 'rgb(99, 83, 83)'
                     }}
                   >
-                    <span style={{display: 'flex', alignItems: 'center'}}>
-                      <img src={phone} alt="phone" style={{width: 12, height: 12}}/> &nbsp;&nbsp;
+                    <span
+                      style={{
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        fontSize: 12,
+                        display: 'flex',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <img src={phone} alt="phone" style={{width: 14}}/>
                       {store.phone_number}
                     </span>
-                    <span style={{paddingRight: 8, display: 'flex', alignItems: 'center'}}>
-                      <img src={clock} alt="clock" style={{width: 12, height: 12}}/> &nbsp;&nbsp;
-                      <span>8:00 - 21:00</span>
+                    <span
+                      style={{paddingRight: 8, display: 'flex', alignItems: 'center'}}
+                    >
+                      <img src={clock} alt="time" style={{width :14}} />
+                      &nbsp;<span>8:00 - 21:00</span>
                     </span>
-                  </span>
-                  <span
+                  </div>
+                  <div
                     style={{
-                      marginTop: 12,
-                      fontSize: 10,
+                      marginTop: 10,
+                      fontSize: 12,
                       textOverflow: 'ellipsis',
-                      overflow: 'hidden',
-                      fontFamily: 'Roboto, sans-serif'
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden'
                     }}
                   >
-                    <img src={note} alt="note" style={{width: 12, height: 12}}/> &nbsp;&nbsp;
                     {store.note}
-                  </span>
+                  </div>
                 </div>
               </div>
             ))}

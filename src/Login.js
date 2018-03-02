@@ -78,20 +78,18 @@ class Login extends React.Component {
           }}
         >
           <div style={{padding: '20px 20px 10px 20px'}}>
-            {warning ? (
-              <span style={{fontSize: 13, color: '#f04846', fontFamily: 'Roboto, sans-serif'}}>Tên đăng nhập hoặc mật khẩu không chính xác!</span>
-            ) : (
-              <span style={{fontSize: 13, fontFamily: 'Roboto, sans-serif'}}>Bạn cần phải đăng nhập để tiếp tục!</span>
+            {warning && (
+              <span style={{fontSize: 13, color: '#f04846'}}>Tên đăng nhập hoặc mật khẩu không chính xác!</span>
             )}
           </div>
           <div
             style={{
               display: 'flex',
               flex: 1,
-              justifyContent: 'center',
               alignItems: 'stretch',
               flexDirection: 'column',
-              padding: '10px 15px 20px 15px'
+              padding: '10px 15px 20px 15px',
+              height: '100vh'
             }}
           >
             <input
@@ -108,7 +106,8 @@ class Login extends React.Component {
                 backgroundSize: '7%',
                 backgroundPositionX: 18,
                 backgroundPositionY: 20,
-                marginBottom: 20
+                marginBottom: 20,
+                fontFamily: 'SF UI Display'
               }}
               value={username}
               onFocus={(e) => e.target.setSelectionRange(0, username.length)}
@@ -128,42 +127,35 @@ class Login extends React.Component {
                 backgroundSize: '7%',
                 backgroundPositionX: 18,
                 backgroundPositionY: 20,
-                marginBottom: 20
+                marginBottom: 20,
+                fontFamily: 'SF UI Display'
               }}
               value={password}
               onFocus={(e) => e.target.setSelectionRange(0, password.length)}
               onChange={(e) => this.changePassword(e.target.value)}
             />
+            <button
+              style={{
+                width: '100%',
+                height: 42,
+                borderRadius: 8,
+                backgroundColor: '#3ACCE1',
+                fontSize: 13,
+                color: 'white',
+                textTransform: 'uppercase',
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              onClick={this.manageLogin}
+            >
+              {isLoggingIn && (
+                <CircularProgress size={20} style={{color: '#fff'}}/>
+              )}
+              &nbsp;&nbsp;Đăng nhập
+            </button>
           </div>
-        </div>
-        <div
-          style={{
-            margin: '10px 0 20px 0',
-            display: 'flex',
-            justifyContent: 'center'
-          }}
-        >
-          <button
-            style={{
-              width: '60%',
-              height: 42,
-              borderRadius: 8,
-              backgroundColor: '#3ACCE1',
-              fontSize: 13,
-              color: 'white',
-              textTransform: 'uppercase',
-              border: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            onClick={this.manageLogin}
-          >
-            {isLoggingIn && (
-              <CircularProgress size={20} style={{color: '#fff'}}/>
-            )}
-            &nbsp;&nbsp;Đăng nhập
-          </button>
         </div>
       </div>
     )

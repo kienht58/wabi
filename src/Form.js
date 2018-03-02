@@ -1,8 +1,10 @@
 import React from "react"
 import {CircularProgress} from "material-ui/Progress"
+import Dialog from "material-ui/Dialog"
 
-
+import my_location from "./my_location.svg"
 import logo from "./logo.svg"
+import Iframe from "./Iframe";
 
 
 class Form extends React.Component {
@@ -23,7 +25,11 @@ class Form extends React.Component {
       note: '',
       imgs: [],
       creating: false,
-      loadingMap: false
+      loadingMap: {
+        loading: false,
+        loadSuccess: false
+      },
+      showMap: false
     }
   }
 
@@ -39,6 +45,11 @@ class Form extends React.Component {
   }
 
   getCurrentLocation = () => {
+    this.setState({
+      loadingMap: {
+        loading: true
+      }
+    })
     navigator.geolocation.getCurrentPosition(position => {
       this.setState({
         address: {
@@ -54,6 +65,10 @@ class Form extends React.Component {
             address: {
               ...this.state.address,
               fullAddress: result.results[0].formatted_address
+            },
+            loadingMap: {
+              loading: false,
+              loadSuccess: true
             }
           })
         } else if(result.status === 'ZERO_RESULTS') {
@@ -62,6 +77,16 @@ class Form extends React.Component {
       })
     })
   }
+
+  showEmbeddedMap = () => {
+    this.setState({
+      showMap: true
+    })
+  }
+
+  closeMap = () => this.setState({
+    showMap: false
+  })
 
   changePhone = phone => this.setState({ phone })
 
@@ -103,7 +128,7 @@ class Form extends React.Component {
       creating: true
     })
 
-    let response = await fetch('https://wabike.herokuapp.com/api/stores', {
+    let response = await fetch('https://walkbike.herokuapp.com/api/stores', {
       method: 'post',
       headers: {
         'content-type': 'application/json'
@@ -137,9 +162,9 @@ class Form extends React.Component {
   }
 
   render() {
-    const {name, address, phone, note, imgs, time, creating, loadingMap} = this.state
+    const {name, address, phone, note, imgs, time, creating, loadingMap, showMap} = this.state
     return (
-      <div style={{backgroundColor: '#fff'}}>
+      <div style={{backgroundColor: '#fff', fontFamily: 'SF UI Display Light'}}>
         <div
           style={{
             padding: '8px 0',
@@ -153,6 +178,35 @@ class Form extends React.Component {
           <i className="material-icons" onClick={this.props.toggleAddStoresDialog} style={{color: '#2a2e43', flex: 1, fontSize: 24, marginLeft: 10}}>keyboard_backspace</i>
           <img src={logo} alt="logo" style={{height: 32, flex: 9, paddingRight: 32}}/>
         </div>
+        {showMap && (
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              zIndex: 100,
+              height: '100vh',
+              backgroundColor: '#00000070',
+              width: '100%'
+            }}
+          >
+            <div
+              style={{
+                marginTop: 'calc((100vh - 300px)/2)',
+                paddingLeft: '2.5%'
+              }}
+            >
+              <Iframe
+                url={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBDWNf6gvLGEJvsdTUU2plNtzqzdiifEEg&q=${encodeURI(address.fullAddress)}`}
+                width="95%"
+                height="300"
+                allowFullScreen={true}
+                position="fixed"
+                display="initial"
+              />
+            </div>
+          </div>
+        )}
         <div
           style={{
             display: 'flex',
@@ -201,12 +255,25 @@ class Form extends React.Component {
                 flex: 1,
                 alignItems: 'center',
                 marginBottom: 20,
-                borderRadius: 16,
-                border: 'none',
-                boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                position: 'relative'
               }}
             >
+              {loadingMap.loadSuccess && (
+                <div
+                  style={{
+                    width: 60,
+                    height: 62,
+                    position: 'absolute',
+                    left: 0,
+                    bottom: 0,
+                    zIndex: 10
+                  }}
+                  onClick={() => this.showEmbeddedMap()}
+                >
+
+                </div>
+              )}
               <input
                 type="text"
                 placeholder="Địa chỉ"
@@ -215,13 +282,19 @@ class Form extends React.Component {
                   paddingLeft: 60,
                   paddingRight: 10,
                   border: 'none',
-                  boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
-                  backgroundImage: 'url(assets/images/location.svg)',
+                  WebkitAppearance: 'none',
                   backgroundRepeat: 'no-repeat',
-                  backgroundSize: '4.5%',
+                  borderRadius: 16,
+                  margin: '2px 8px 2px 2px',
+                  boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
+                  WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
+                  backgroundImage: 'url(assets/images/location_red.svg)',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '8%',
                   backgroundPositionX: 21,
                   backgroundPositionY: 22,
-                  flex: 2
+                  flex: 2,
+                  position:'relative'
                 }}
                 value={address.fullAddress}
                 onFocus={(e) => e.target.setSelectionRange(0, address.fullAddress.length)}
@@ -232,14 +305,20 @@ class Form extends React.Component {
                   background: '#fff',
                   border: 'none',
                   height: 62,
-                  width: 24,
-                  paddingRight: 30,
-                  backgroundImage: 'url(assets/images/my_location.svg)',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPositionY: 19
+                  width: 62,
+                  borderRadius: 10,
+                  margin: 2,
+                  boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
+                  WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
                 }}
                 onClick={() => this.getCurrentLocation()}
-              />
+              >
+                {loadingMap.loading ? (
+                  <CircularProgress size={24} />
+                ) : (
+                  <img src={my_location} style={{width: 24, height: 24}}/>
+                )}
+              </button>
             </div>
             <input
               type="tel"

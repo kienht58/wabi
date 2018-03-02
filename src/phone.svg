@@ -2,9 +2,9 @@
   <defs>
     <style>
       .cls-1 {
-        fill: none;
-        stroke: #8d8d8d;
-        stroke-width: 2px;
+        fill: #329e58;
+        stroke: #329e58;
+        stroke-width: 1px;
       }
     </style>
   </defs>

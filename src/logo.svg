@@ -4,7 +4,7 @@
       .cls-1 {
         fill: #454f63;
         font-size: 16px;
-        font-family: SFUIDisplay-Regular, SF UI Display;
+        font-family: SF Ui Display, sans-serif;
       }
 
       .cls-2 {
