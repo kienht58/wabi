@@ -1,6 +1,5 @@
 import React from "react"
 import {CircularProgress} from "material-ui/Progress"
-import Dialog from "material-ui/Dialog"
 
 import my_location from "./my_location.svg"
 import logo from "./logo.svg"
@@ -79,8 +78,17 @@ class Form extends React.Component {
   }
 
   showEmbeddedMap = () => {
+    let that = this
     this.setState({
       showMap: true
+    }, () => {
+      document.addEventListener('touchend', function(event) {
+        if(that.wrapperRef && !that.wrapperRef.contains(event.target)) {
+          that.setState({
+            showMap: false
+          })
+        }
+      })
     })
   }
 
@@ -161,6 +169,10 @@ class Form extends React.Component {
     }
   }
 
+  setWrapperRef = node => {
+    this.wrapperRef = node
+  }
+
   render() {
     const {name, address, phone, note, imgs, time, creating, loadingMap, showMap} = this.state
     return (
@@ -195,6 +207,7 @@ class Form extends React.Component {
                 marginTop: 'calc((100vh - 300px)/2)',
                 paddingLeft: '2.5%'
               }}
+              ref={this.setWrapperRef}
             >
               <Iframe
                 url={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBDWNf6gvLGEJvsdTUU2plNtzqzdiifEEg&q=${encodeURI(address.fullAddress)}`}
@@ -289,7 +302,6 @@ class Form extends React.Component {
                   boxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
                   WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
                   backgroundImage: 'url(assets/images/location_red.svg)',
-                  backgroundRepeat: 'no-repeat',
                   backgroundSize: '8%',
                   backgroundPositionX: 21,
                   backgroundPositionY: 22,
@@ -316,7 +328,7 @@ class Form extends React.Component {
                 {loadingMap.loading ? (
                   <CircularProgress size={24} />
                 ) : (
-                  <img src={my_location} style={{width: 24, height: 24}}/>
+                  <img src={my_location} style={{width: 24, height: 24}} alt="location"/>
                 )}
               </button>
             </div>
