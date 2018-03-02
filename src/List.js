@@ -6,9 +6,7 @@ import Snackbar, {SnackbarContent} from "material-ui/Snackbar"
 import {withStyles} from "material-ui/styles"
 
 import Form from "./Form"
-import location from "./location.svg"
 
-import note from "./note.svg"
 import phone from "./phone.svg"
 import clock from './clock.svg'
 
