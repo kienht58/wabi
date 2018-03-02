@@ -160,7 +160,7 @@ class List extends React.Component {
               >
                 <div style={{width: '30%', float: 'left', marginRight: 8}}>
                   <img
-                    src={store.image ? `https://walkbike.herokuapp.com/public/uploads/${store.image.url}` : "http://via.placeholder.com/81x80"}
+                    src={store.image ? `https://walkbike.herokuapp.com/${store.image.url}` : "http://via.placeholder.com/81x80"}
                     alt="placeholder"
                     style={{borderRadius: 4, width: '100%'}}
                   />
