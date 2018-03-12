@@ -28,7 +28,8 @@ class Form extends React.Component {
         loading: false,
         loadSuccess: false
       },
-      showMap: false
+      showMap: false,
+      editting: false
     }
   }
 
@@ -130,14 +131,17 @@ class Form extends React.Component {
   }
 
   createStore = async () => {
-    const {name, address, phone, time, note, imgs} = this.state
-    const {accessToken} = this.props
+    const {name, address, phone, time, note, imgs, editting} = this.state
+    const {accessToken, store} = this.props
     this.setState({
       creating: true
     })
 
-    let response = await fetch('https://walkbike.herokuapp.com/api/stores', {
-      method: 'post',
+    let url = editting ? `http://localhost:8000/api/stores/${store.id}/update` : 'http://localhost:8000/api/stores'
+    let method = editting ? 'put' : 'post'
+
+    let response = await fetch(url, {
+      method: method,
       headers: {
         'content-type': 'application/json'
       },
@@ -159,8 +163,8 @@ class Form extends React.Component {
 
     if(response.ok && response.status === 200) {
       if(!result.error) {
-        this.props.toggleAddStoresDialog()
-        this.props.showSuccessionMessage()
+        // this.props.toggleAddStoresDialog()
+        // this.props.showSuccessionMessage()
       } else {
         // TODO: notify
       }
@@ -173,8 +177,25 @@ class Form extends React.Component {
     this.wrapperRef = node
   }
 
+  componentDidMount() {
+      if(this.props.store && this.props.store.id) {
+        let store = this.props.store
+        this.setState({
+          name: store.name,
+          address: {
+            fullAddress: store.address,
+            lat: store.lat,
+            lng: store.lng
+          },
+          phone: store.phone_number,
+          note: store.note,
+          editting: true
+        })
+      }
+  }
+
   render() {
-    const {name, address, phone, note, imgs, time, creating, loadingMap, showMap} = this.state
+    const {name, address, phone, note, imgs, time, creating, loadingMap, showMap, editting} = this.state
     return (
       <div style={{backgroundColor: '#fff', fontFamily: 'SF UI Display Light'}}>
         <div
@@ -219,6 +240,17 @@ class Form extends React.Component {
               />
             </div>
           </div>
+        )}
+        {editting && (
+          <p
+            style={{
+              fontSize: 13,
+              fontFamily: 'SF UI Display',
+              paddingLeft: 20
+            }}
+          >
+            Chỉnh sửa địa điểm
+          </p>
         )}
         <div
           style={{
@@ -328,6 +360,7 @@ class Form extends React.Component {
                 value={address.fullAddress}
                 onFocus={(e) => e.target.setSelectionRange(0, address.fullAddress.length)}
                 onChange={(e) => this.changeAddress(e.target.value)}
+                disabled={editting}
               />
               <button
                 style={{
@@ -341,6 +374,7 @@ class Form extends React.Component {
                   WebkitBoxShadow: '0 1px 6px 0 rgba(117, 117, 117, 0.2), 0 1px 6px 0 rgba(151, 151, 151, 0.19)',
                 }}
                 onClick={() => this.getCurrentLocation()}
+                disabled={editting}
               >
                 {loadingMap.loading ? (
                   <CircularProgress size={24} />
@@ -392,67 +426,69 @@ class Form extends React.Component {
               onChange={(e) => this.changeNote(e.target.value)}
             />
           </div>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              backgroundColor: '#fff',
-              padding: '10px 10px 10px 15px',
-              overflowX: 'scroll',
-              margin: '5px 0'
-            }}
-          >
-            <button
+          {!editting && (
+            <div
               style={{
-                textTransform: 'uppercase',
-                color: 'white',
-                fontSize: 13,
-                whiteSpace: 'nowrap',
-                background: '#2A2E43',
-                padding: '18px 20px 18px 48px',
-                borderRadius: 12,
-                border: 'none',
-                WebkitAppearance: 'none',
-                backgroundImage: 'url(assets/images/add-image.svg)',
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: '18%',
-                backgroundPositionX: 13,
-                backgroundPositionY: 15
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: '#fff',
+                padding: '10px 10px 10px 15px',
+                overflowX: 'scroll',
+                margin: '5px 0'
               }}
-
-              onClick={() => this.inputFile.click()}
             >
-              Thêm ảnh
-            </button>
-            <input
-              type="file"
-              accept="image/*"
-              style={{display: 'none'}}
-              ref={ip => this.inputFile = ip}
-              onChange={(e) => this.addImages(e.target.files)}
-              multiple
-            />
-            <div style={{display: 'flex', flexDirection: 'row'}}>
-              {(imgs.length > 0) && (
-                imgs.map((img, idx) => (
-                  <img
-                    key={idx}
-                    style={{
-                      height: 64,
-                      width: 86,
-                      marginLeft: 10,
-                      marginRight: 7,
-                      borderRadius: 12,
-                      border: 'solid 1px #E8E8E8'
-                    }}
-                    src={img}
-                    alt="location"
-                  />
-                ))
-              )}
+              <button
+                style={{
+                  textTransform: 'uppercase',
+                  color: 'white',
+                  fontSize: 13,
+                  whiteSpace: 'nowrap',
+                  background: '#2A2E43',
+                  padding: '18px 20px 18px 48px',
+                  borderRadius: 12,
+                  border: 'none',
+                  WebkitAppearance: 'none',
+                  backgroundImage: 'url(assets/images/add-image.svg)',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '18%',
+                  backgroundPositionX: 13,
+                  backgroundPositionY: 15
+                }}
+
+                onClick={() => this.inputFile.click()}
+              >
+                Thêm ảnh
+              </button>
+              <input
+                type="file"
+                accept="image/*"
+                style={{display: 'none'}}
+                ref={ip => this.inputFile = ip}
+                onChange={(e) => this.addImages(e.target.files)}
+                multiple
+              />
+              <div style={{display: 'flex', flexDirection: 'row'}}>
+                {(imgs.length > 0) && (
+                  imgs.map((img, idx) => (
+                    <img
+                      key={idx}
+                      style={{
+                        height: 64,
+                        width: 86,
+                        marginLeft: 10,
+                        marginRight: 7,
+                        borderRadius: 12,
+                        border: 'solid 1px #E8E8E8'
+                      }}
+                      src={img}
+                      alt="location"
+                    />
+                  ))
+                )}
+              </div>
             </div>
-          </div>
+          )}
           <div
             style={{
               margin: '10px 0 20px 0',

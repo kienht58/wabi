@@ -25,7 +25,7 @@ class App extends Component {
     const accessToken = cookies.get('token')
 
     if(accessToken) {
-      let response = await fetch(`https://walkbike.herokuapp.com/api/validateUserToken?token=${accessToken}`)
+      let response = await fetch(`http://localhost:8000/api/validateUserToken?token=${accessToken}`)
       let result = await response.json()
 
       if(result.error) {

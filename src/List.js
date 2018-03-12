@@ -29,7 +29,8 @@ class List extends React.Component {
       loading: false,
       open: false,
       keyword: '',
-      showMsg: false
+      showMsg: false,
+      edittingStore: ''
     }
   }
 
@@ -48,9 +49,10 @@ class List extends React.Component {
     showMsg: false
   })
 
-  toggleAddStoresDialog = () => this.setState({
+  toggleAddStoresDialog = (store = {}) => this.setState({
     open: !this.state.open,
-    keyword: ''
+    keyword: '',
+    edittingStore: store
   })
 
   changeKeyword = kw => this.setState({
@@ -69,7 +71,7 @@ class List extends React.Component {
 
     const {keyword} = this.state
     const {accessToken} = this.props
-    let response = await fetch(`https://walkbike.herokuapp.com/api/stores?token=${accessToken}&keyword=${keyword}`)
+    let response = await fetch(`http://localhost:8000/api/stores?token=${accessToken}&keyword=${keyword}`)
     let result = await response.json()
     if(response.ok && response.status === 200) {
       if(result.data) {
@@ -84,7 +86,7 @@ class List extends React.Component {
   }
 
   render() {
-    const {stores, loading, keyword, open, showMsg} = this.state
+    const {stores, loading, keyword, open, showMsg, edittingStore} = this.state
     const {accessToken} = this.props
     return (
       <div
@@ -160,7 +162,7 @@ class List extends React.Component {
               >
                 <div style={{width: '30%', float: 'left', marginRight: 8}}>
                   <img
-                    src={store.image ? `https://walkbike.herokuapp.com/${store.image.url}` : "http://via.placeholder.com/81x80"}
+                    src={store.image ? `http://localhost:8000/${store.image.url}` : "http://via.placeholder.com/81x80"}
                     alt="placeholder"
                     style={{borderRadius: 4, width: '100%'}}
                   />
@@ -180,12 +182,16 @@ class List extends React.Component {
                       overflow: 'hidden'
                     }}
                   >
-                    {store.name}
+                    <span>{store.name}</span>
+                    <span style={{float: 'right'}} onClick={() => this.toggleAddStoresDialog(store)}>
+                      <i className="material-icons" style={{fontSize: 14, color: 'rgb(99, 83, 83)'}}>edit</i>
+                    </span>
                   </div>
                   <div
                     style={{
                       marginTop: 5,
-                      fontSize: 12
+                      fontSize: 12,
+                      color: 'rgb(99, 83, 83)'
                     }}
                   >
                     {store.address}
@@ -222,7 +228,7 @@ class List extends React.Component {
                   </div>
                   <div
                     style={{
-                      marginTop: 10,
+                      marginTop: 4,
                       fontSize: 12,
                       textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',
@@ -258,7 +264,12 @@ class List extends React.Component {
             paper: this.props.classes.paper
           }}
         >
-          <Form accessToken={accessToken} toggleAddStoresDialog={this.toggleAddStoresDialog} showSuccessionMessage={this.showSuccessionMessage}/>
+          <Form
+            accessToken={accessToken}
+            toggleAddStoresDialog={this.toggleAddStoresDialog}
+            showSuccessionMessage={this.showSuccessionMessage}
+            store={edittingStore}
+          />
         </Dialog>
         <Snackbar
           anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}

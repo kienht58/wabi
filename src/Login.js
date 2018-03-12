@@ -34,7 +34,7 @@ class Login extends React.Component {
       isLoggingIn: true
     })
 
-    let response = await fetch('https://walkbike.herokuapp.com/api/login', {
+    let response = await fetch('http://localhost:8000/api/login', {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
