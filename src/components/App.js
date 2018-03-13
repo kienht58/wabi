@@ -2,22 +2,25 @@ import React, { Component } from 'react'
 import {withCookies} from "react-cookie"
 import {CircularProgress} from "material-ui/Progress"
 
-import logo from "./logo.svg"
-import Login from "./Login"
-import List from "./List"
+import {logo} from "./icons"
+
+import Login from "./login"
+import List from "./list"
+
+import {API_URL} from "../config"
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
       isLoggedIn: false,
-      checkLogin: true
+      loggingIn: true
     }
   }
 
   verifyUser = () => this.setState({
     isLoggedIn: true,
-    checkLogin: false
+    loggingIn: false
   })
 
   async componentWillMount() {
@@ -25,13 +28,13 @@ class App extends Component {
     const accessToken = cookies.get('token')
 
     if(accessToken) {
-      let response = await fetch(`http://localhost:8000/api/validateUserToken?token=${accessToken}`)
+      let response = await fetch(`${API_URL}/validateUserToken?token=${accessToken}`)
       let result = await response.json()
 
       if(result.error) {
         this.setState({
           isLoggedIn: false,
-          checkLogin: false
+          loggingIn: false
         })
       } else {
         this.verifyUser()
@@ -39,13 +42,13 @@ class App extends Component {
     } else {
       this.setState({
         isLoggedIn: false,
-        checkLogin: false
+        loggingIn: false
       })
     }
   }
 
   render() {
-    const {checkLogin, isLoggedIn} = this.state
+    const {loggingIn, isLoggedIn} = this.state
     const {cookies} = this.props
     const accessToken = cookies.get('token')
     return (
@@ -62,7 +65,7 @@ class App extends Component {
         >
           <img src={logo} alt="logo" style={{height: 32}}/>
         </div>
-        {checkLogin ? (
+        {loggingIn ? (
           <div
             style={{
               color: '#fff',

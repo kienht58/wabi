@@ -5,10 +5,8 @@ import Dialog from "material-ui/Dialog"
 import Snackbar, {SnackbarContent} from "material-ui/Snackbar"
 import {withStyles} from "material-ui/styles"
 
-import Form from "./Form"
-
-import phone from "./phone.svg"
-import clock from './clock.svg'
+import Form from "../form"
+import {phone, clock} from '../icons'
 
 const styles = {
   root: {
@@ -30,7 +28,7 @@ class List extends React.Component {
       open: false,
       keyword: '',
       showMsg: false,
-      edittingStore: ''
+      editingStore: ''
     }
   }
 
@@ -52,7 +50,7 @@ class List extends React.Component {
   toggleAddStoresDialog = (store = {}) => this.setState({
     open: !this.state.open,
     keyword: '',
-    edittingStore: store
+    editingStore: store
   })
 
   changeKeyword = kw => this.setState({
@@ -86,7 +84,7 @@ class List extends React.Component {
   }
 
   render() {
-    const {stores, loading, keyword, open, showMsg, edittingStore} = this.state
+    const {stores, loading, keyword, open, showMsg, editingStore} = this.state
     const {accessToken} = this.props
     return (
       <div
@@ -268,7 +266,7 @@ class List extends React.Component {
             accessToken={accessToken}
             toggleAddStoresDialog={this.toggleAddStoresDialog}
             showSuccessionMessage={this.showSuccessionMessage}
-            store={edittingStore}
+            store={editingStore}
           />
         </Dialog>
         <Snackbar
