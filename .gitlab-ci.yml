@@ -1,0 +1,39 @@
+stages:
+  - build
+  - deploy
+
+build:react:
+  stage: build
+  image: node:8.4-alpine
+  cache:
+    key: npm-cache
+    paths: [ .npm ]
+  before_script:
+    - npm config set cache .npm
+    - yarn install
+  script:
+    - npm run build
+  only:
+    - master
+
+deploy:production:
+  stage: deploy
+  image: google/cloud-sdk
+  script:
+    # Copy credentials to tmp file
+    - echo $DEPLOY_KEY_FILE_PRODUCTION > $CI_PIPELINE_ID.json
+
+    # Authenticate
+    - gcloud auth activate-service-account --key-file $CI_PIPELINE_ID.json
+
+    # Copy app.yaml to Google Cloud Storage Bucket
+    - gsutil cp app.yaml gs://ktv.walkbikes.com
+
+    # Copy static files to Google Cloud Storage Bucket
+    - cd build
+    - gsutil -m cp -r * gs://ktv.walkbikes.com
+  after_script:
+    - rm $CI_PIPELINE_ID.json
+  only:
+  - master
+  when: manual
